@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import check from '../views/check'
+import ShoppingCart from '../views/ShoppingCart'
 
 Vue.use(VueRouter)
 
@@ -9,7 +9,7 @@ const routes = [
   {
     path: '/',
     name: 'check',
-    component: check
+    component: ShoppingCart
   },
 ]
 
@@ -19,3 +19,5 @@ const router = new VueRouter({
 })
 
 export default router
+
+import "@/styles/main.css" 
