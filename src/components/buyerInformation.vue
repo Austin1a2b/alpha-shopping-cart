@@ -99,6 +99,7 @@ export default {
     },
     fetchStorage() {
       const StorageData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
       this.buyerInformation = StorageData ? StorageData : this.buyerInformation;
     },
   },
