@@ -4,7 +4,7 @@
     <div class="cart-list">
       <!---->
       <div v-for="cartItem in cartItems" :key="cartItem.key" class="cart-item">
-        <img src="https://i.postimg.cc/Y0RBPrTr/2.png" class="img goods-img" />
+        <img :src="cartItem.img" class="img goods-img" />
         <div class="goods-info">
           <div class="goods-name">{{ cartItem.name }}</div>
           <div class="goods-amount">
@@ -29,7 +29,7 @@
     </div>
     <div class="delivery-fee__wrapper">
       <div class="delivery-price__name">運費</div>
-      <div class="fee deliver-fee">免費</div>
+      <div class="fee deliver-fee">{{ deliveryMethod }}</div>
     </div>
     <div class="total-wrapper">
       <div class="total-price__name">小計</div>
@@ -46,6 +46,11 @@ export default {
   props: {
     initialCartItems: {
       type: Array,
+      required: true,
+    },
+    deliveryMethod: {
+      type: [String, Number],
+      require: true,
     },
   },
   data() {
@@ -56,11 +61,13 @@ export default {
   },
   methods: {
     fetchCartItem() {
-      const localData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
-      console.log(localData);
-      //筆記 注意資料類型 , 這邊是陣列 , 判斷要加.length
+      //這邊為了 測試功能方便  所以 手動在網頁上 清空購物車項目 或是 刪除 LocalStorage 的內容
+      // 再重新整理網頁  都會 重新載入 initialCartItem
+      const localData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY))
+        ? JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY))
+        : [];
       this.cartItems =
-        localData.length !== 0 ? localData : this.initialCartItems;
+        localData.length === 0 ? this.initialCartItems : localData;
     },
     addAmount(id) {
       this.cartItems = this.cartItems.map((cartItem) => {
@@ -100,11 +107,17 @@ export default {
         money = money + cartItem.amount * cartItem.price;
         return money;
       });
-      console.log(money);
-      this.totalAmount = money;
+      if (this.deliveryMethod === "免費") {
+        this.totalAmount = money;
+      } else {
+        this.totalAmount = money + parseInt(this.deliveryMethod);
+      }
     },
     saveStorage() {
       localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(this.cartItems));
+    },
+    saveChange() {
+      this.$emit("cartItemChange", this.cartItems);
     },
   },
   watch: {
@@ -112,8 +125,12 @@ export default {
       handler: function () {
         this.countMoney();
         this.saveStorage();
+        this.saveChange();
       },
       deep: true,
+    },
+    deliveryMethod() {
+      this.countMoney();
     },
   },
   created() {

@@ -6,9 +6,10 @@
           <h2 class="page-name">運送方式</h2>
           <div class="delivery-wrapper">
             <input
+              v-model="deliveryMethod"
               type="radio"
               name="shipping-method"
-              value="0"
+              value="免費"
               class="delivery-method"
             />
             <label>
@@ -41,10 +42,29 @@
 
 <script>
 export default {
+  props: {
+    initialDeliveryMethod: {
+      type: [String, Number],
+      require: true,
+    },
+  },
   data() {
     return {
       deliveryMethod: "",
     };
+  },
+  methods: {
+    fetchData() {
+      this.deliveryMethod = this.initialDeliveryMethod;
+    },
+  },
+  created() {
+    this.fetchData();
+  },
+  watch: {
+    deliveryMethod() {
+      this.$emit("deliveryMethodChanege", this.deliveryMethod);
+    },
   },
 };
 </script>

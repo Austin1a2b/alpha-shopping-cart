@@ -4,14 +4,22 @@
     <div class="main-content">
       <stepper :step="step" />
       <buyerInformation v-if="step === 1" />
-      <deliveryMethod v-if="step === 2" />
+      <deliveryMethod
+        :initialDeliveryMethod="deliveryMethod"
+        v-if="step === 2"
+        @deliveryMethodChanege="deliveryMethodChanege"
+      />
       <payInformation v-if="step === 3" />
       <controlPannel
         :initialStep="step"
         @after-previous-step="afterPreviousStep"
         @after-next-step="afterNextStep"
       />
-      <cartList :initialCartItems="cartItems" />
+      <cartList
+        :deliveryMethod="deliveryMethod"
+        :initialCartItems="cartItems"
+        @cartItemChange="aftercartItemChange"
+      />
     </div>
   </div>
 </template>
@@ -45,6 +53,7 @@ const dummyData = {
       totalAmount: 1299,
     },
   ],
+  deliveryMethod: "免費",
 };
 
 export default {
@@ -52,6 +61,7 @@ export default {
     return {
       step: 1,
       cartItems: [],
+      deliveryMethod: "",
     };
   },
   components: {
@@ -65,12 +75,19 @@ export default {
   methods: {
     fetchData() {
       this.cartItems = dummyData.cartItems;
+      this.deliveryMethod = dummyData.deliveryMethod;
     },
     afterPreviousStep(nowStep) {
       this.step = nowStep;
     },
     afterNextStep(nowStep) {
       this.step = nowStep;
+    },
+    aftercartItemChange(newCartItems) {
+      this.cartItems = newCartItems;
+    },
+    deliveryMethodChanege(method) {
+      this.deliveryMethod = method;
     },
   },
   created() {

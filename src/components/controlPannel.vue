@@ -24,6 +24,7 @@ export default {
   props: {
     initialStep: {
       type: Number,
+      required: true,
     },
   },
   data() {
