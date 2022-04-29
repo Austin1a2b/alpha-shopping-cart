@@ -807,6 +807,8 @@ form input::placeholder {
 .stepper-panel .step.active .circle-container {
   background-color: #2a2a2a;
   color: #ffffff;
+  width: 30px;
+  height: 30px;
 }
 
 .stepper-panel .step .connect-line {
@@ -1077,6 +1079,10 @@ form .credit-card {
     color: #2a2a2a;
   }
 
+  .stepper-panel .step.checked .step-label {
+    vertical-align: super;
+  }
+
   .stepper-panel .step .connect-line {
     left: calc(-35% + 30px);
     right: calc(65% + 30px);
@@ -1128,4 +1134,6 @@ form .credit-card {
     grid-column: 2/3;
     grid-row: 1/2;
   }
+
+
 }
